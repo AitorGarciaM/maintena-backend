@@ -73,18 +73,39 @@ public class EquipmentService {
   }
 
   // Filter equipment by fields.
-  public List<Equipment> searchFilteredEquipment(String internalId, String serialNumber, String name, String model, String manufacturer, Date installationDate, State state, Boolean retired) {
-    
-    Boolean retiredField = (retired != null && retired) ? null : false;
-    
-    Specification<Equipment> spec = Specification.where(EquipmentSpecs.hasInternalId(internalId))
-                                                 .and(EquipmentSpecs.hasSerialNumber(serialNumber))
-                                                 .and(EquipmentSpecs.hasName(name))
-                                                 .and(EquipmentSpecs.hasModel(model))
-                                                 .and(EquipmentSpecs.hasManufacturer(manufacturer))
-                                                 .and(EquipmentSpecs.hasInstallationDate(installationDate))
-                                                 .and(EquipmentSpecs.hasState(state))
-                                                 .and(EquipmentSpecs.hasRetired(retiredField));
+  public List<Equipment> searchFilteredEquipment(String internalId, String serialNumber, String name, String model, String manufacturer, Date installationDate, String location, State state, Boolean retired) {
+
+    Specification<Equipment> spec = Specification.where((root, query, cb) -> cb.conjunction());
+
+    // Solo añadimos el filtro si el parámetro NO es nulo
+    if (internalId != null && !internalId.isEmpty()) {
+      spec = spec.and(EquipmentSpecs.hasInternalId(internalId));
+    }
+    if (serialNumber != null && !serialNumber.isEmpty()) {
+      spec = spec.and(EquipmentSpecs.hasSerialNumber(serialNumber));
+    }
+    if (name != null && !name.isEmpty()) {
+      spec = spec.and(EquipmentSpecs.hasName(name));
+    }
+    if (model != null && !model.isEmpty()) {
+      spec = spec.and(EquipmentSpecs.hasModel(model));
+    }
+    if (manufacturer != null && !manufacturer.isEmpty()) {
+      spec = spec.and(EquipmentSpecs.hasManufacturer(manufacturer));
+    }
+    if (installationDate != null) {
+      spec = spec.and(EquipmentSpecs.hasInstallationDate(installationDate));
+    }
+    if (location != null && !location.isEmpty()) {
+      spec = spec.and(EquipmentSpecs.hasLocation(location));
+    }
+    if (state != null) {
+      spec = spec.and(EquipmentSpecs.hasState(state));
+    }
+    if (retired != null) { // <-- Solo filtra por retired si el usuario lo envía explícitamente
+      spec = spec.and(EquipmentSpecs.hasRetired(retired));
+    }
+
     return equipmentRepository.findAll(spec);
-  } 
+  }
 }

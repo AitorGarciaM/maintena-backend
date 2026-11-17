@@ -8,15 +8,17 @@ import com.maintena.maintena_backend.Entities.Equipment;
 import com.maintena.maintena_backend.Enums.State;
 
 public class EquipmentSpecs {
+
+  private EquipmentSpecs() {}
   
   public static Specification<Equipment> hasInternalId(String internalId) {
-    return (root, query, critariaBuilder) -> {
+    return (root, query, criteriaBuilder) -> {
       if(internalId == null) {
-        return null;
+        return criteriaBuilder.conjunction();
       }
-      return critariaBuilder.like(
-        critariaBuilder.lower(root.get("internalId")),
-        "%" + internalId.toLowerCase() + "%"
+      return criteriaBuilder.equal(
+        criteriaBuilder.lower(root.get("internalId")),
+        internalId.toLowerCase() .trim()
       );
     };
   }
@@ -24,10 +26,10 @@ public class EquipmentSpecs {
   public static Specification<Equipment> hasSerialNumber(String serialNumber) {
     return (root, query, criteriaBuilder) -> {
       if(serialNumber == null) {
-        return null;
+        return criteriaBuilder.conjunction();
       }
       return criteriaBuilder.like(
-        criteriaBuilder.lower(root.get("serialNumber")), 
+        criteriaBuilder.lower(root.get("serialNumber")),
         "%" + serialNumber.toLowerCase() + "%"
       );
     };
@@ -36,7 +38,7 @@ public class EquipmentSpecs {
   public static Specification<Equipment> hasName(String name) {
     return (root, query, criteriaBuilder) -> {
       if(name == null) {
-        return null;
+        return criteriaBuilder.conjunction();
       }
       return criteriaBuilder.like(
         criteriaBuilder.lower(root.get("name")),
@@ -48,7 +50,7 @@ public class EquipmentSpecs {
   public static Specification<Equipment> hasModel(String model) {
     return (root, query, criteriaBuilder) -> {
       if(model == null) {
-        return null;
+        return criteriaBuilder.conjunction();
       }
       return criteriaBuilder.like(
         criteriaBuilder.lower(root.get("model")),
@@ -60,7 +62,7 @@ public class EquipmentSpecs {
   public static Specification<Equipment> hasManufacturer(String manufacturer) {
     return (root, query, criteriaBuilder) -> {
       if(manufacturer == null) {
-        return null;
+        return criteriaBuilder.conjunction();
       }
       return  criteriaBuilder.like(
         criteriaBuilder.lower(root.get("manufacturer")),
@@ -72,7 +74,7 @@ public class EquipmentSpecs {
   public static Specification<Equipment> hasInstallationDate(Date installationDate) {
     return (root, query, criteriaBuilder) -> {
       if(installationDate == null) {
-        return null;
+        return criteriaBuilder.conjunction();
       }
       return criteriaBuilder.equal(root.get("installationDate"), installationDate);
     };
@@ -81,7 +83,7 @@ public class EquipmentSpecs {
   public static Specification<Equipment> hasLocation(String location) {
     return (root, query, criteriaBuilder) -> {
       if (location == null) {
-        return null;
+        return criteriaBuilder.conjunction();
       }
       return criteriaBuilder.like(
         criteriaBuilder.lower(root.get("location")),
@@ -93,7 +95,7 @@ public class EquipmentSpecs {
   public static Specification<Equipment> hasState(State state) {
     return (root, query, criteriaBuilder) -> {
       if(state == null) {
-        return null;
+        return criteriaBuilder.conjunction();
       }
       return criteriaBuilder.equal(root.get("state"), state);
     };
@@ -102,7 +104,7 @@ public class EquipmentSpecs {
   public static Specification<Equipment> hasRetired(Boolean retired) {
     return (root, query, criteriaBuilder) -> {
       if (retired == null) {
-        return null;
+        return criteriaBuilder.conjunction();
       }
       return criteriaBuilder.equal(root.get("retired"), retired);
     };
