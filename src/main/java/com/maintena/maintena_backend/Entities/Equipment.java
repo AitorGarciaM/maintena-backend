@@ -1,7 +1,7 @@
 package com.maintena.maintena_backend.Entities;
 
-import java.sql.Timestamp;
-import java.sql.Date;
+import  java.sql.Timestamp;
+import java.time.LocalDate;
 
 import com.maintena.maintena_backend.Enums.State;
 
@@ -30,7 +30,7 @@ public class Equipment {
   @Column(nullable = false)
   private String manufacturer;
   @Column(name= "installation_date", nullable = false)
-  private Date installationDate;
+  private LocalDate installationDate;
   @Column(nullable = false)
   private String location;
   @Column(nullable = false)
@@ -48,7 +48,7 @@ public class Equipment {
 
   }
 
-  public Equipment(String internalId, String serialNumber, String name, String model, String manufacturer, Date installationDate, String location, State state, Boolean retired) {
+  public Equipment(String internalId, String serialNumber, String name, String model, String manufacturer, LocalDate installationDate, String location, State state, Boolean retired) {
     this.internalId = internalId;
     this.serialNumber = serialNumber;
     this.name = name;
@@ -104,7 +104,7 @@ public class Equipment {
     return manufacturer;
   }
 
-  public Date getInstallationDate() {
+  public LocalDate getInstallationDate() {
     return installationDate;
   }
 
@@ -153,7 +153,7 @@ public class Equipment {
     this.manufacturer = manufacturer;
   }
 
-  public void setInstallationDate(Date installationDate) {
+  public void setInstallationDate(LocalDate installationDate) {
     this.installationDate = installationDate;
   }
 

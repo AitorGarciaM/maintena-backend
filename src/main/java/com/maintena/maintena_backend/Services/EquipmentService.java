@@ -10,8 +10,9 @@ import com.maintena.maintena_backend.Enums.State;
 import com.maintena.maintena_backend.Repositories.EquipmentRepository;
 import com.maintena.maintena_backend.Specifications.EquipmentSpecs;
 
-import  org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Sort;
 
 @Service 
 public class EquipmentService {
@@ -106,6 +107,8 @@ public class EquipmentService {
       spec = spec.and(EquipmentSpecs.hasRetired(retired));
     }
 
-    return equipmentRepository.findAll(spec);
+    Sort sort = Sort.by(Sort.Direction.ASC, "id");
+
+    return equipmentRepository.findAll(spec, sort);
   }
 }

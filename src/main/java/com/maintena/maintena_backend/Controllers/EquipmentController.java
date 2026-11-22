@@ -11,6 +11,7 @@ import com.maintena.maintena_backend.Services.EquipmentService;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController 
 public class EquipmentController {
   private final EquipmentService equipmentService;
@@ -43,17 +44,18 @@ public class EquipmentController {
     return equipmentService.searchFilteredEquipment(internalID, serialNumber, name, model, manufacturer, installationDate, location, state, retired);
   }
   
+  
   @GetMapping("/equipment/{id}")
   public Equipment getMethodName(@PathVariable long id) {
       return equipmentService.getEquipmentById(id);
   }
-
+  
   @PostMapping("/equipment")
   @ResponseStatus(HttpStatus.CREATED)
   public Equipment creaEquipment(@RequestBody Equipment newEquipment) {
     return equipmentService.registerEquipment(newEquipment);
   }
-
+  
   @PatchMapping("/equipment/{id}")
   public Equipment updateEquipment(@RequestBody Equipment newEquipment, @PathVariable Long id) {
     return equipmentService.updateEquipment(id, newEquipment);
