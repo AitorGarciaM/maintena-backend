@@ -1,5 +1,6 @@
 package com.maintena.maintena_backend.Services;
 
+import com.maintena.maintena_backend.Controllers.EquipmentController;
 import java.util.List;
 import java.sql.Date;
 
@@ -10,11 +11,15 @@ import com.maintena.maintena_backend.Enums.State;
 import com.maintena.maintena_backend.Repositories.EquipmentRepository;
 import com.maintena.maintena_backend.Specifications.EquipmentSpecs;
 
+import jakarta.persistence.EntityNotFoundException;
+
+import com.maintena.maintena_backend.Exceptions.DuplicateInternalIdException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.domain.Sort;
 
-@Service 
+@Service
 public class EquipmentService {
   
   @Autowired
@@ -26,6 +31,12 @@ public class EquipmentService {
 
   // Register new equipment.
   public Equipment registerEquipment(Equipment equipment) {
+    if(equipmentRepository.existsByInternalId(equipment.getInternalId())){
+      throw new DuplicateInternalIdException(
+        "Ya existe una máquina con ese identificador interno"
+      );
+    }
+
     return equipmentRepository.save(equipment);
   }
 
@@ -42,6 +53,18 @@ public class EquipmentService {
   // Update the equipment fields.
   public Equipment updateEquipment(long id, Equipment newEquipment) {
     Equipment oldEquipment = getEquipmentById(id);
+
+    if(oldEquipment == null) {
+      throw new EntityNotFoundException("Equipo no encontrado");
+    }
+
+    if(newEquipment.getInternalId() != null
+       && !newEquipment.getInternalId().equals(oldEquipment.getInternalId())
+       && equipmentRepository.existsByInternalId(newEquipment.getInternalId())) {
+        throw new DuplicateInternalIdException(
+          "Ya existe una máquina con ese identificador interno"
+        );
+    }
 
     oldEquipment.setInternalId(newEquipment.getInternalId());
     oldEquipment.setSerialNumber(newEquipment.getSerialNumber());
